@@ -9,7 +9,7 @@
 // Execute `rustlings hint errors6` or use the `hint` watch subcommand for a
 // hint.
 
-// 
+// I AM NOT DONE
 
 use std::num::ParseIntError;
 
@@ -20,18 +20,21 @@ enum ParsePosNonzeroError {
     ParseInt(ParseIntError),
 }
 
-impl ParsePosNonzeroError {
-    fn from_creation(err: CreationError) -> ParsePosNonzeroError {
-        ParsePosNonzeroError::Creation(err)
-    }
-    fn from_parseint(err: ParseIntError) -> ParsePosNonzeroError {
+impl From<ParseIntError> for ParsePosNonzeroError {
+    fn from(err: ParseIntError) -> Self {
         ParsePosNonzeroError::ParseInt(err)
+    }
+}
+impl From<CreationError> for ParsePosNonzeroError {
+    fn from(err: CreationError) -> Self {
+        ParsePosNonzeroError::Creation(err)
     }
 }
 
 fn parse_pos_nonzero(s: &str) -> Result<PositiveNonzeroInteger, ParsePosNonzeroError> {
-    let x: i64 = s.parse().map_err(ParsePosNonzeroError::from_parseint)?;
-    PositiveNonzeroInteger::new(x).map_err(ParsePosNonzeroError::from_creation)
+    let x: i64 = s.parse()?;
+    let res = PositiveNonzeroInteger::new(x)?;
+    Ok(res)
 }
 
 // Don't change anything below this line.

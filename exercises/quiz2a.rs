@@ -31,17 +31,20 @@ pub enum Command {
 mod my_module {
     use super::Command;
 
-    pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
-        let mut output: Vec<String> = vec![];
-        for (string, command) in input.into_iter() {
-            let s = match command {
-                Command::Uppercase => string.to_uppercase(),
-                Command::Trim => string.trim().to_owned(),
-                Command::Append(n) => string + &"bar".repeat(n),
-            };
-            output.push(s);
+    fn transform(t: (String, Command)) -> String {
+        let (s, c) = t;
+        match c {
+            Command::Uppercase => s.to_uppercase(),
+            Command::Trim => s.trim().to_owned(),
+            Command::Append(n) => s + &"bar".repeat(n),
         }
-        output
+    }
+
+    pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
+        input
+            .into_iter()
+            .map(transform)
+            .collect()
     }
 }
 
